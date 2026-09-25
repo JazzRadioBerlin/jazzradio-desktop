@@ -25,9 +25,35 @@ if (-not $IsccPath) {
 if (-not $IsccPath -or -not (Test-Path -LiteralPath $IsccPath)) {
     throw 'Install Inno Setup from https://jrsoftware.org/isdl.php or provide -IsccPath.'
 }
-$compilerVersion = (Get-Item -LiteralPath $IsccPath).VersionInfo.FileVersion
-if ([version]($compilerVersion -replace ', ', '.') -lt [version]'6.3.0.0') {
-    throw 'Inno Setup 6.3 or later is required for x64-compatible Windows support.'
+# ISCC's PE FileVersion/ProductVersion are placeholders. The compiler engine
+# reports its actual version when reading a script, not in the /? banner.
+$probeRoot = Join-Path ([IO.Path]::GetTempPath()) ('JazzRadio-InnoProbe-' + [guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $probeRoot | Out-Null
+try {
+    $probe = Join-Path $probeRoot 'version.iss'
+    @'
+[Setup]
+AppName=JazzRadio compiler check
+AppVersion=0.0.0
+CreateAppDir=no
+Uninstallable=no
+Output=no
+OutputDir=
+OutputManifestFile=
+'@ | Set-Content -LiteralPath $probe -Encoding ascii
+    $probeOutput = & $IsccPath $probe 2>&1
+    $probeExit = $LASTEXITCODE
+} finally {
+    Remove-Item -LiteralPath $probeRoot -Recurse -Force
+}
+$engine = [regex]::Match(($probeOutput -join "`n"), 'Compiler engine version:\s+Inno Setup\s+(\d+\.\d+\.\d+)')
+if ($probeExit -ne 0 -or -not $engine.Success) {
+    throw "Could not verify Inno Setup engine version (exit $probeExit):`n$($probeOutput -join "`n")"
+}
+$compilerVersion = $engine.Groups[1].Value
+Write-Output "Inno Setup compiler engine: $compilerVersion"
+if ([version]$compilerVersion -lt [version]'6.3.0') {
+    throw "Inno Setup $compilerVersion is too old; 6.3 or later is required for x64-compatible Windows support."
 }
 $manifest = Get-Content -LiteralPath 'package.json' -Raw | ConvertFrom-Json
 if ($manifest.version -notmatch '^\d+\.\d+\.\d+$') {

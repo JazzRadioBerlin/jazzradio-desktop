@@ -39,29 +39,22 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           npm.cmd test
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-      - name: Locate or install Inno Setup
+      - name: Install verified Inno Setup 6.7.3
         id: inno
         run: |
-          $compiler = @(
-            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
-            "$env:ProgramFiles\Inno Setup 6\ISCC.exe",
-            "$env:ProgramFiles\Inno Setup 7\ISCC.exe"
-          ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
-          if (-not $compiler) {
-            $download = Join-Path $env:RUNNER_TEMP 'innosetup-6.7.3.exe'
-            Invoke-WebRequest 'https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe' -OutFile $download
-            if ((Get-FileHash -LiteralPath $download -Algorithm SHA256).Hash -ne '9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732') {
-              throw 'Inno Setup download checksum mismatch.'
-            }
-            $signature = Get-AuthenticodeSignature -LiteralPath $download
-            if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.GetNameInfo('SimpleName', $false) -ne 'Pyrsys B.V.') {
-              throw 'Inno Setup publisher verification failed.'
-            }
-            $toolDirectory = Join-Path $env:RUNNER_TEMP 'InnoSetup'
-            $process = Start-Process $download -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-', '/CURRENTUSER', '/TASKS=""', "/DIR=`"$toolDirectory`"") -Wait -PassThru
-            if ($process.ExitCode -ne 0) { throw 'Inno Setup installation failed.' }
-            $compiler = Join-Path $toolDirectory 'ISCC.exe'
+          $download = Join-Path $env:RUNNER_TEMP 'innosetup-6.7.3.exe'
+          Invoke-WebRequest 'https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe' -OutFile $download
+          if ((Get-FileHash -LiteralPath $download -Algorithm SHA256).Hash -ne '9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732') {
+            throw 'Inno Setup download checksum mismatch.'
           }
+          $signature = Get-AuthenticodeSignature -LiteralPath $download
+          if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.GetNameInfo('SimpleName', $false) -ne 'Pyrsys B.V.') {
+            throw 'Inno Setup publisher verification failed.'
+          }
+          $toolDirectory = Join-Path $env:RUNNER_TEMP 'InnoSetup'
+          $process = Start-Process $download -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-', '/CURRENTUSER', '/TASKS=""', "/DIR=`"$toolDirectory`"") -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw 'Inno Setup installation failed.' }
+          $compiler = Join-Path $toolDirectory 'ISCC.exe'
           "compiler=$compiler" >> $env:GITHUB_OUTPUT
       - name: Build unsigned installer
         run: ./scripts/windows-build.ps1 -IsccPath '${{ steps.inno.outputs.compiler }}'

@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "release:mac": "node scripts/mac-release.cjs",
     "package:mas:unsigned": "JAZZRADIO_MAS=unsigned electron-forge package --platform=mas --arch=universal",
     "package:mas:development": "JAZZRADIO_MAS=development electron-forge package --platform=mas --arch=universal",
     "make:mas": "JAZZRADIO_MAS=distribution electron-forge make --platform=mas --arch=universal"

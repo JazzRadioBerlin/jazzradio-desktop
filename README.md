@@ -30,7 +30,11 @@ npm run package
 
 Packages are written to `out/`. For an x64 Windows build, use `npm run package -- --platform=win32 --arch=x64` on Windows. Keep the complete Windows application folder together; the executable needs the accompanying files.
 
-These commands produce unsigned development packages. Signing and release installers are separate steps.
+These commands produce unsigned development packages.
+
+For an unsigned Windows EXE installer, run the [Windows installer workflow](.github/workflows/windows-installer.yml).
+
+For a signed, notarized Mac DMG, set `JAZZRADIO_DEVELOPER_ID_IDENTITY` to the JazzRadio Developer ID identity and `JAZZRADIO_NOTARY_PROFILE` to its Keychain notarization profile, then run `npm run release:mac -- --output /absolute/new-directory` on macOS from a clean Git checkout.
 
 ## Rights and feedback
 

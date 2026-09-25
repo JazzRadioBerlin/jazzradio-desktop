@@ -8,12 +8,18 @@ import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 
-// MAS is opt-in. Ordinary development and ZIP builds never select signing.
+// Store and direct distribution are separate opt-in signing paths.
 const masMode = process.env.JAZZRADIO_MAS;
 if (masMode && !['unsigned', 'development', 'distribution'].includes(masMode)) {
   throw new Error('JAZZRADIO_MAS must be unsigned, development or distribution');
 }
 const signedMAS = masMode === 'development' || masMode === 'distribution';
+const directMode = process.env.JAZZRADIO_DIRECT;
+if (directMode && !['unsigned', 'distribution'].includes(directMode)) {
+  throw new Error('JAZZRADIO_DIRECT must be unsigned or distribution');
+}
+if (masMode && directMode) throw new Error('Choose either MAS or direct distribution');
+const signedDirect = directMode === 'distribution';
 function required(name: string): string {
   const value = process.env[name];
   if (!value?.trim()) throw new Error(`Set ${name} locally before signing`);
@@ -23,6 +29,10 @@ const buildVersion = process.env.JAZZRADIO_BUILD_NUMBER ?? '1';
 if (!/^[1-9]\d*$/.test(buildVersion)) throw new Error('Build number must be a positive integer');
 const profile = signedMAS ? required('JAZZRADIO_MAS_PROFILE') : undefined;
 if (profile && !path.isAbsolute(profile)) throw new Error('JAZZRADIO_MAS_PROFILE must be an absolute local path');
+const developerIdentity = signedDirect ? required('JAZZRADIO_DEVELOPER_ID_IDENTITY') : undefined;
+if (developerIdentity && !/^Developer ID Application: .+ \(2MHNF9468Q\)$/.test(developerIdentity)) {
+  throw new Error('Direct distribution requires JazzRadio\'s Developer ID Application identity');
+}
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -42,7 +52,7 @@ const config: ForgeConfig = {
     // Packager selects .icns for macOS/MAS and .ico for Windows.
     icon: path.resolve(__dirname, 'assets/app'),
     buildVersion,
-    ...(masMode ? {
+    ...(masMode || directMode ? {
       electronVersion: '44.4.5',
       osxUniversal: { mergeASARs: true },
       extendInfo: { ElectronTeamID: '2MHNF9468Q' },
@@ -72,9 +82,29 @@ const config: ForgeConfig = {
         },
       },
     } : {}),
+    ...(signedDirect ? {
+      osxSign: {
+        type: 'distribution' as const,
+        identity: developerIdentity,
+        preAutoEntitlements: false,
+        preEmbedProvisioningProfile: false,
+        ...{ continueOnError: false },
+        optionsForFile: () => ({
+          hardenedRuntime: true,
+          entitlements: path.resolve(__dirname, 'build/entitlements.direct.plist'),
+        }),
+      },
+    } : {}),
     appBundleId: 'org.jazzradio.JazzRadio',
     name: 'JazzRadio',
     appCategoryType: 'public.app-category.music',
+    win32metadata: {
+      CompanyName: 'JazzRadio',
+      FileDescription: 'JazzRadio',
+      ProductName: 'JazzRadio',
+      InternalName: 'JazzRadio',
+      OriginalFilename: 'JazzRadio.exe',
+    },
   },
   hooks: {
     prePackage: async (_config, platform) => {
@@ -83,6 +113,9 @@ const config: ForgeConfig = {
       }
       if ((platform === 'mas') !== Boolean(masMode)) {
         throw new Error('Use the package:mas:* or make:mas scripts for MAS; unset JAZZRADIO_MAS for ordinary builds');
+      }
+      if (directMode && platform !== 'darwin') {
+        throw new Error('Direct macOS distribution requires the darwin platform');
       }
     },
   },
@@ -116,9 +149,8 @@ const config: ForgeConfig = {
     }),
     new FusesPlugin({
       version: FuseVersion.V1,
-      // Unsigned MAS preparation must not auto-sign the arm64 slice: this also
-      // creates signature files absent from x64 and prevents universal merging.
-      ...(masMode ? { resetAdHocDarwinSignature: false } : {}),
+      // Sign only after merging: arm64-only signature files prevent merging.
+      ...(masMode || directMode ? { resetAdHocDarwinSignature: false } : {}),
       [FuseV1Options.RunAsNode]: false,
       [FuseV1Options.EnableCookieEncryption]: true,
       [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,

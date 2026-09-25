@@ -1,0 +1,76 @@
+name: Windows installer
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/windows-installer.yml'
+      - 'scripts/windows-*.ps1'
+      - 'build/windows-installer.iss'
+
+permissions:
+  contents: read
+
+jobs:
+  installer:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24.21.0'
+          cache: npm
+      - name: Install dependencies
+        run: |
+          npm.cmd ci
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Check source
+        run: |
+          npm.cmd run typecheck
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm.cmd test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Locate or install Inno Setup
+        id: inno
+        run: |
+          $compiler = @(
+            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup 6\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup 7\ISCC.exe"
+          ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+          if (-not $compiler) {
+            $download = Join-Path $env:RUNNER_TEMP 'innosetup-6.7.3.exe'
+            Invoke-WebRequest 'https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe' -OutFile $download
+            if ((Get-FileHash -LiteralPath $download -Algorithm SHA256).Hash -ne '9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732') {
+              throw 'Inno Setup download checksum mismatch.'
+            }
+            $signature = Get-AuthenticodeSignature -LiteralPath $download
+            if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.GetNameInfo('SimpleName', $false) -ne 'Pyrsys B.V.') {
+              throw 'Inno Setup publisher verification failed.'
+            }
+            $toolDirectory = Join-Path $env:RUNNER_TEMP 'InnoSetup'
+            $process = Start-Process $download -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-', '/CURRENTUSER', '/TASKS=""', "/DIR=`"$toolDirectory`"") -Wait -PassThru
+            if ($process.ExitCode -ne 0) { throw 'Inno Setup installation failed.' }
+            $compiler = Join-Path $toolDirectory 'ISCC.exe'
+          }
+          "compiler=$compiler" >> $env:GITHUB_OUTPUT
+      - name: Build unsigned installer
+        run: ./scripts/windows-build.ps1 -IsccPath '${{ steps.inno.outputs.compiler }}'
+      - name: Verify isolated install and uninstall
+        run: ./scripts/windows-test-installer.ps1
+      - name: Retain installer and provenance
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: JazzRadio-windows-x64-${{ github.sha }}
+          path: out/installers/*
+          if-no-files-found: error
+          retention-days: 14

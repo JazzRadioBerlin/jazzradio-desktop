@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' https://*.mzstatic.com; media-src 'self' https://streaming.radio.co; connect-src 'self' https://public.radio.co https://streaming.radio.co; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+  <body class="mode-main">
+    <svg class="sprite" width="0" height="0" aria-hidden="true">
+      <defs>
+        <g id="vinyl">
+          <circle cx="150" cy="150" r="148" fill="#0e0d0a" />
+          <circle
+            cx="150"
+            cy="150"
+            r="148"
+            fill="none"
+            stroke="rgba(242,239,230,0.14)"
+            stroke-width="1"
+          />
+          <circle
+            cx="150"
+            cy="150"
+            r="128"
+            fill="none"
+            stroke="rgba(242,239,230,0.05)"
+            stroke-width="1"
+          />
+          <circle
+            cx="150"
+            cy="150"
+            r="112"
+            fill="none"
+            stroke="rgba(242,239,230,0.05)"
+            stroke-width="1"
+          />
+          <circle
+            cx="150"
+            cy="150"
+            r="96"
+            fill="none"
+            stroke="rgba(242,239,230,0.05)"
+            stroke-width="1"
+          />
+          <circle
+            cx="150"
+            cy="150"
+            r="80"
+            fill="none"
+            stroke="rgba(242,239,230,0.05)"
+            stroke-width="1"
+          />
+          <path
+            d="M 150 8 A 142 142 0 0 1 292 150"
+            fill="none"
+            stroke="rgba(242,239,230,0.10)"
+            stroke-width="2"
+          />
+          <circle cx="150" cy="150" r="46" fill="#cf7b2e" />
+          <circle
+            cx="150"
+            cy="150"
+            r="46"
+            fill="none"
+            stroke="rgba(22,20,15,0.25)"
+            stroke-width="1"
+          />
+          <circle cx="150" cy="150" r="5" fill="#f2efe6" />
+        </g>
+        <symbol id="disc-mark" viewBox="0 0 40 40">
+          <circle
+            cx="20"
+            cy="20"
+            r="13"
+            fill="none"
+            stroke="var(--ph-ring,#777264)"
+            stroke-width="1.4"
+          />
+          <circle cx="20" cy="20" r="5.5" fill="#cf7b2e" />
+          <circle cx="20" cy="20" r="1.3" fill="#f2efe6" />
+        </symbol>
+        <symbol id="ic-heart" viewBox="0 0 24 24">
+          <path
+            d="M12 20.3 4.9 13a4.6 4.6 0 0 1 0-6.5 4.4 4.4 0 0 1 6.4 0l.7.8.7-.8a4.4 4.4 0 0 1 6.4 0 4.6 4.6 0 0 1 0 6.5Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linejoin="round"
+          />
+        </symbol>
+        <symbol id="ic-search" viewBox="0 0 24 24">
+          <circle
+            cx="10.5"
+            cy="10.5"
+            r="6.2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          />
+          <path
+            d="m15.3 15.3 5 5"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+          />
+        </symbol>
+        <symbol id="ic-expand" viewBox="0 0 24 24">
+          <path
+            d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </symbol>
+        <symbol id="ic-collapse" viewBox="0 0 24 24">
+          <path
+            d="M10 4v6H4M14 20v-6h6M10 10 3 3M14 14l7 7"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </symbol>
+        <symbol id="ic-gear" viewBox="0 0 24 24">
+          <path
+            d="M10.66 2.49A9.6 9.6 0 0 1 13.34 2.49L13.32 5.53A6.6 6.6 0 0 1 15.64 6.5L17.78 4.33A9.6 9.6 0 0 1 19.67 6.22L17.5 8.36A6.6 6.6 0 0 1 18.47 10.68L21.51 10.66A9.6 9.6 0 0 1 21.51 13.34L18.47 13.32A6.6 6.6 0 0 1 17.5 15.64L19.67 17.78A9.6 9.6 0 0 1 17.78 19.67L15.64 17.5A6.6 6.6 0 0 1 13.32 18.47L13.34 21.51A9.6 9.6 0 0 1 10.66 21.51L10.68 18.47A6.6 6.6 0 0 1 8.36 17.5L6.22 19.67A9.6 9.6 0 0 1 4.33 17.78L6.5 15.64A6.6 6.6 0 0 1 5.53 13.32L2.49 13.34A9.6 9.6 0 0 1 2.49 10.66L5.53 10.68A6.6 6.6 0 0 1 6.5 8.36L4.33 6.22A9.6 9.6 0 0 1 6.22 4.33L8.36 6.5A6.6 6.6 0 0 1 10.68 5.53Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" />
+        </symbol>
+        <symbol id="ic-vol" viewBox="0 0 24 24">
+          <path d="M4 9.5v5h3.5L12 19V5L7.5 9.5Z" fill="currentColor" />
+          <path
+            d="M15.5 9a4.3 4.3 0 0 1 0 6M18 6.6a7.6 7.6 0 0 1 0 10.8"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </symbol>
+        <symbol id="ic-play" viewBox="0 0 24 24">
+          <path d="M8 5.5v13l11-6.5Z" fill="currentColor" />
+        </symbol>
+        <symbol id="ic-pause" viewBox="0 0 24 24">
+          <rect x="7" y="5.5" width="3.4" height="13" rx="1" fill="currentColor" />
+          <rect x="13.6" y="5.5" width="3.4" height="13" rx="1" fill="currentColor" />
+        </symbol>
+        <symbol id="ic-share" viewBox="0 0 24 24">
+          <path
+            d="M12 3v12M12 3 8 7M12 3l4 4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M5 11v8.5h14V11"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </symbol>
+        <symbol id="ic-copy" viewBox="0 0 24 24">
+          <rect
+            x="8"
+            y="8"
+            width="12"
+            height="12"
+            rx="2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+          />
+          <path
+            d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+          />
+        </symbol>
+        <symbol id="ic-file" viewBox="0 0 24 24">
+          <path
+            d="M6 3h8l4 4v14H6Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M14 3v4h4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          />
+        </symbol>
+      </defs>
+    </svg>
+
+    <audio id="stream" preload="none"></audio>
+
+    <div class="layout layout-mini">
+      <div class="mini-art">
+        <span class="ph"><svg><use href="#disc-mark"></use></svg></span>
+        <img class="js-art" alt="" hidden />
+        <div class="mini-scrim-top">
+          <span class="mini-live"><span class="livedot"></span><span class="js-live-badge"></span></span>
+        </div>
+        <div class="mini-hover">
+          <button type="button" class="ibtn js-heart" data-i18n-title="favorite">
+            <svg width="18" height="18"><use href="#ic-heart"></use></svg>
+          </button>
+          <button type="button" class="ibtn js-google" data-i18n-title="google">
+            <svg width="18" height="18"><use href="#ic-search"></use></svg>
+          </button>
+          <button type="button" class="ibtn js-expand" data-i18n-title="expand">
+            <svg width="18" height="18"><use href="#ic-expand"></use></svg>
+          </button>
+        </div>
+      </div>
+      <div class="mini-bar">
+        <button type="button" class="playbtn js-play" data-i18n-title="play">
+          <svg class="ic-play" width="19" height="19"><use href="#ic-play"></use></svg>
+          <svg class="ic-pause" width="19" height="19"><use href="#ic-pause"></use></svg>
+        </button>
+        <div class="mini-meta">
+          <div class="st"><span data-i18n="appName"></span></div>
+          <div class="tt"><span class="js-artist"></span> – <span class="js-title"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout layout-main">
+    <header class="full-top">
+      <span class="wintitle" data-app-title></span>
+      <div class="spacer"></div>
+      <button type="button" class="ibtn js-collapse" data-i18n-title="collapse" disabled>
+        <svg width="16" height="16"><use href="#ic-collapse"></use></svg>
+      </button>
+  <button type="button" class="ibtn js-settings" data-i18n-title="settings" aria-pressed="false">
+        <svg width="16" height="16"><use href="#ic-gear"></use></svg>
+      </button>
+    </header>
+
+    <div class="full-body">
+      <div class="player-col">
+        <div class="stage">
+          <div class="vinyl">
+            <svg class="vinyl-spin" viewBox="0 0 300 300"><use href="#vinyl"></use></svg>
+          </div>
+          <div class="artwrap">
+            <span class="ph"><svg><use href="#disc-mark"></use></svg></span>
+            <img class="js-art" alt="" hidden />
+          </div>
+        </div>
+        <div class="nowplaying">
+          <div class="title"><span class="js-title"></span></div>
+          <div class="artist js-artist"></div>
+          <div class="meta">
+            <span class="livedot"></span>
+            <span class="js-live"></span>
+            <span class="js-meta-sep">·</span>
+            <span class="js-bitrate"></span>
+          </div>
+        </div>
+        <div class="controls">
+          <button type="button" class="ibtn side js-google" data-i18n-title="google">
+            <svg width="20" height="20"><use href="#ic-search"></use></svg>
+          </button>
+          <button type="button" class="playbtn js-play" data-i18n-title="play">
+            <svg class="ic-play" width="24" height="24"><use href="#ic-play"></use></svg>
+            <svg class="ic-pause" width="24" height="24"><use href="#ic-pause"></use></svg>
+          </button>
+          <button type="button" class="ibtn side js-heart" data-i18n-title="favorite">
+            <svg width="20" height="20"><use href="#ic-heart"></use></svg>
+          </button>
+        </div>
+        <div class="volrow">
+          <svg width="14" height="14"><use href="#ic-vol"></use></svg>
+          <input type="range" min="0" max="100" value="80" class="js-vol" data-i18n-title="volume" />
+        </div>
+      </div>
+      <div class="panel-col">
+        <div class="tabs">
+          <button type="button" class="tab on" data-panel="playlist" data-i18n="playlist"></button>
+          <button type="button" class="tab" data-panel="favoriten" data-i18n="favorites"></button>
+          <button type="button" class="tab" data-panel="notizen" data-i18n="notes"></button>
+          <span class="share tabshare" hidden>
+            <button type="button" class="sharebtn iconly js-share-toggle" data-i18n-title="share">
+              <svg width="15" height="15"><use href="#ic-share"></use></svg>
+            </button>
+            <span class="sharemenu">
+              <button type="button" data-share="copy">
+                <svg width="15" height="15"><use href="#ic-copy"></use></svg>
+                <span data-i18n="shareCopy"></span>
+              </button>
+              <button type="button" data-share="file">
+                <svg width="15" height="15"><use href="#ic-file"></use></svg>
+                <span data-i18n="shareFile"></span>
+              </button>
+              <button type="button" class="js-share-sheet" data-share="sheet">
+                <svg width="15" height="15"><use href="#ic-share"></use></svg>
+                <span data-i18n="shareSheet"></span>
+              </button>
+            </span>
+          </span>
+        </div>
+        <div class="panels">
+          <div class="panel on" data-panel="playlist">
+            <div class="js-playlist"></div>
+          </div>
+          <div class="panel" data-panel="favoriten">
+            <div class="js-favs"></div>
+          </div>
+          <div class="panel" data-panel="notizen">
+            <div class="notes papier js-notes">
+              <div class="sheet">
+                <div class="note-compose">
+                  <div class="anchor">
+                    <span class="dot"></span>
+                    <span class="js-anchor"></span>
+                  </div>
+                  <textarea
+                    class="field js-note-compose"
+                    rows="2"
+                    data-i18n-placeholder="notePlaceholder"
+                  ></textarea>
+                </div>
+                <div class="js-notes-list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="settings">
+          <section class="settings-section">
+            <h2 class="settings-kicker" data-i18n="settingsAppearance"></h2>
+            <div class="seg js-theme" role="group">
+              <button type="button" data-theme="dark" data-i18n="themeDark"></button>
+              <button type="button" data-theme="light" data-i18n="themeLight"></button>
+              <button type="button" data-theme="system" data-i18n="themeSystem"></button>
+            </div>
+          </section>
+          <section class="settings-section">
+            <h2 class="settings-kicker" data-i18n="settingsLanguage"></h2>
+            <div class="seg js-language" role="group" data-i18n-title="settingsLanguage">
+              <button type="button" data-language="system" data-i18n="languageSystem"></button>
+              <button type="button" data-language="de" data-i18n="languageGerman"></button>
+              <button type="button" data-language="en" data-i18n="languageEnglish"></button>
+            </div>
+          </section>
+          <section class="settings-section">
+            <h2 class="settings-kicker" data-i18n="settingsNotepad"></h2>
+            <div class="settings-row">
+              <span class="settings-label" data-i18n="notepadShow"></span>
+              <button
+                type="button"
+                class="toggle js-notepad-enabled"
+                role="switch"
+                aria-checked="true"
+              ></button>
+            </div>
+            <div class="seg js-notepad-skin" role="group">
+              <button type="button" data-skin="paper" data-i18n="notepadPaper"></button>
+              <button type="button" data-skin="ink" data-i18n="notepadInk"></button>
+            </div>
+          </section>
+          <section class="settings-section">
+            <h2 class="settings-kicker" data-i18n="settingsWindow"></h2>
+            <div class="settings-row">
+              <span class="settings-label" data-i18n="alwaysOnTop"></span>
+              <button
+                type="button"
+                class="toggle js-always-on-top"
+                role="switch"
+                aria-checked="false"
+              ></button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>

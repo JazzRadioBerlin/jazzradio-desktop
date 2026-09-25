@@ -1,0 +1,31 @@
+import type { Favorite, FavoriteDraft, GoogleQuery, Note, NowPlayingPayload, PanelId, ShareRequest, StreamState, Track } from './ipc';
+import type { Settings, WindowMode } from './window';
+
+export type JazzradioApi = {
+  readonly platform: 'darwin' | 'win32' | 'other';
+  onNowPlaying: (callback: (payload: NowPlayingPayload) => void) => () => void;
+  onHistory: (callback: (tracks: Track[]) => void) => () => void;
+  setStreamState: (state: StreamState) => void;
+  setMode: (mode: WindowMode) => void;
+  syncMode: () => void;
+  onModeChanged: (callback: (mode: WindowMode) => void) => () => void;
+  onMiniAvailabilityChanged: (callback: (available: boolean) => void) => () => void;
+  getSettings: () => Promise<Settings>;
+  setSettings: (patch: Partial<Settings>) => void;
+  onSettingsChanged: (callback: (settings: Settings) => void) => () => void;
+  listFavorites: () => Promise<Favorite[]>;
+  toggleFavorite: (draft: FavoriteDraft) => Promise<Favorite[]>;
+  onFavoritesChanged: (callback: (items: Favorite[]) => void) => () => void;
+  searchGoogle: (query: GoogleQuery) => void;
+  share: (request: ShareRequest) => void;
+  onPanelSet: (callback: (panel: PanelId) => void) => () => void;
+  listNotes: () => Promise<Note[]>;
+  addNote: (text: string) => Promise<Note[]>;
+  updateNote: (id: string, text: string) => Promise<Note[]>;
+  removeNote: (id: string) => Promise<Note[]>;
+  onNotesChanged: (callback: (items: Note[]) => void) => () => void;
+  onNotesFocus: (callback: () => void) => () => void;
+  onThemeResolved: (callback: (dark: boolean) => void) => () => void;
+  onPlaybackToggle: (callback: () => void) => () => void;
+  onPlaybackReconnect: (callback: () => void) => () => void;
+};

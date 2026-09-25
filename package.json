@@ -1,0 +1,42 @@
+{
+  "name": "jazzradio-desktop-app",
+  "productName": "JazzRadio",
+  "version": "0.1.0",
+  "description": "Desktop player for JazzRadio Berlin",
+  "main": ".vite/build/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron-forge start",
+    "test": "node --test",
+    "typecheck": "tsc --noEmit",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "package:mas:unsigned": "JAZZRADIO_MAS=unsigned electron-forge package --platform=mas --arch=universal",
+    "package:mas:development": "JAZZRADIO_MAS=development electron-forge package --platform=mas --arch=universal",
+    "make:mas": "JAZZRADIO_MAS=distribution electron-forge make --platform=mas --arch=universal"
+  },
+  "keywords": [],
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.11.2",
+    "@electron-forge/maker-pkg": "7.11.2",
+    "@electron-forge/maker-zip": "^7.11.2",
+    "@electron-forge/plugin-fuses": "^7.11.2",
+    "@electron-forge/plugin-vite": "^7.11.2",
+    "@electron/fuses": "^1.8.0",
+    "electron": "44.4.5",
+    "typescript": "~5.7.3",
+    "vite": "~7.3.6"
+  },
+  "dependencies": {
+    "electron-store": "^11.0.2"
+  },
+  "overrides": {
+    "@electron/packager": {
+      "extract-zip": "npm:@electron-internal/extract-zip@1.0.5"
+    },
+    "external-editor": {
+      "tmp": "0.2.7"
+    }
+  }
+}
